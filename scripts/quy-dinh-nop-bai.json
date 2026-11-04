@@ -1,0 +1,159 @@
+{
+  "_ghiChu": "Quy định nộp bài theo từng nhánh. Tên nhánh = khóa. Mọi bài thực hành đều là bài cá nhân.",
+  "buoi-01": {
+    "moTa": "Buổi 1 – Kiểm thử tĩnh (bài cá nhân)",
+    "duocSua": [
+      "bai-nop/Buoi01-Phan1-KhamPha.md",
+      "bai-nop/Buoi01-Phan2-PhieuReview.md",
+      "bai-nop/Buoi01-Phan3-PhanTichTinh.md",
+      "bai-nop/hinh/",
+      "src/lab-static/orderUtils.js"
+    ],
+    "batBuocDien": [
+      "bai-nop/Buoi01-Phan1-KhamPha.md",
+      "bai-nop/Buoi01-Phan2-PhieuReview.md",
+      "bai-nop/Buoi01-Phan3-PhanTichTinh.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "ESLint Phần 3 (npm run lint:lab)",
+        "lenh": "npm run lint:lab"
+      }
+    ]
+  },
+  "buoi-02": {
+    "moTa": "Buổi 2 – Thiết kế ca kiểm thử hộp đen (bài cá nhân)",
+    "duocSua": [
+      "bai-nop/Buoi02-TestCase.csv",
+      "bai-nop/Buoi02-DuLieuKiemThu.csv",
+      "bai-nop/Buoi02-PhanHoach.md",
+      "bai-nop/Buoi02-BangQuyetDinh.md",
+      "bai-nop/Buoi02-SoDoTrangThai.md",
+      "bai-nop/Buoi02-ThucThi-RTM.md",
+      "bai-nop/Buoi02-Pairwise.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "bai-nop/Buoi02-TestCase.csv",
+      "bai-nop/Buoi02-DuLieuKiemThu.csv",
+      "bai-nop/Buoi02-PhanHoach.md",
+      "bai-nop/Buoi02-BangQuyetDinh.md",
+      "bai-nop/Buoi02-SoDoTrangThai.md",
+      "bai-nop/Buoi02-ThucThi-RTM.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bộ ca kiểm thử Buổi 2",
+        "lenh": "node scripts/kiem-tra-csv.js"
+      }
+    ]
+  },
+  "buoi-03": {
+    "moTa": "Buổi 3 – Kiểm thử đơn vị và bao phủ mã nguồn (bài cá nhân)",
+    "duocSua": [
+      "tests/unit/du-lieu-csv.test.js",
+      "tests/unit/do-phu.test.js",
+      "tests/unit/auth-mock.test.js",
+      "bai-nop/Buoi02-DuLieuKiemThu.csv",
+      "bai-nop/Buoi03-PhanTichKetQua.md",
+      "bai-nop/Buoi03-DoPhu.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "tests/unit/du-lieu-csv.test.js",
+      "tests/unit/do-phu.test.js",
+      "tests/unit/auth-mock.test.js",
+      "bai-nop/Buoi03-PhanTichKetQua.md",
+      "bai-nop/Buoi03-DoPhu.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 3",
+        "lenh": "node scripts/kiem-tra-buoi03.js"
+      }
+    ]
+  },
+  "buoi-04": {
+    "moTa": "Buổi 4 – Kiểm thử xác nhận, hồi quy và quản lý lỗi (bài cá nhân)",
+    "duocSua": [
+      "bai-nop/Buoi04-TestPlan.md",
+      "bai-nop/Buoi04-XacNhan-HoiQuy.md",
+      "bai-nop/Buoi04-Exploratory.md",
+      "bai-nop/Buoi04-Pairwise.md",
+      "bai-nop/hinh/",
+      "tests/unit/du-lieu-csv.test.js",
+      "tests/unit/do-phu.test.js",
+      "tests/unit/auth-mock.test.js",
+      "bai-nop/Buoi02-DuLieuKiemThu.csv"
+    ],
+    "batBuocDien": [
+      "bai-nop/Buoi04-TestPlan.md",
+      "bai-nop/Buoi04-XacNhan-HoiQuy.md",
+      "bai-nop/Buoi04-Exploratory.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 4",
+        "lenh": "node scripts/kiem-tra-buoi04.js"
+      }
+    ]
+  },
+  "buoi-05": {
+    "moTa": "Buổi 5 – Kiểm thử tự động giao diện với Playwright (bài cá nhân)",
+    "duocSua": [
+      "tests/e2e/01-luong-chinh.spec.js",
+      "tests/e2e/02-flaky.spec.js",
+      "tests/e2e/03-pom.spec.js",
+      "tests/e2e/04-loc-san-pham.spec.js",
+      "tests/pages/ProductPage.js",
+      "tests/pages/CartPage.js",
+      "tests/pages/LoginPage.js",
+      "bai-nop/Buoi05-BaoCaoE2E.md",
+      "bai-nop/Buoi05-Flaky-POM.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "tests/e2e/01-luong-chinh.spec.js",
+      "tests/e2e/02-flaky.spec.js",
+      "tests/e2e/03-pom.spec.js",
+      "tests/e2e/04-loc-san-pham.spec.js",
+      "tests/pages/ProductPage.js",
+      "tests/pages/CartPage.js",
+      "bai-nop/Buoi05-BaoCaoE2E.md",
+      "bai-nop/Buoi05-Flaky-POM.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 5",
+        "lenh": "node scripts/kiem-tra-buoi05.js"
+      }
+    ]
+  },
+  "buoi-06": {
+    "moTa": "Buổi 6 – Kiểm thử API, tích hợp liên tục và tổng kết (bài cá nhân)",
+    "duocSua": [
+      "tests/api/01-xac-thuc.spec.js",
+      "tests/api/02-nghiep-vu.spec.js",
+      "tests/gen-ai/ai-sinh.test.js",
+      ".github/workflows/kiem-thu-day-du.yml",
+      "bai-nop/Buoi06-BaoCaoAPI-CI.md",
+      "bai-nop/Buoi06-GenAI.md",
+      "bai-nop/Buoi06-TongKet.md",
+      "bai-nop/hinh/"
+    ],
+    "batBuocDien": [
+      "tests/api/01-xac-thuc.spec.js",
+      "tests/api/02-nghiep-vu.spec.js",
+      ".github/workflows/kiem-thu-day-du.yml",
+      "bai-nop/Buoi06-BaoCaoAPI-CI.md",
+      "bai-nop/Buoi06-GenAI.md",
+      "bai-nop/Buoi06-TongKet.md"
+    ],
+    "lenhKiemTra": [
+      {
+        "ten": "Kiểm tra bài nộp Buổi 6",
+        "lenh": "node scripts/kiem-tra-buoi06.js"
+      }
+    ]
+  }
+}

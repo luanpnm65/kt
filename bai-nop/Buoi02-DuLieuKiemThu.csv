@@ -1,0 +1,21 @@
+MaCa,Ham,ThamSo,KetQuaKyVong
+TC-65131848-01,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc01@ntu.edu.vn"",""age"":17,""password"":""Matkhau123""}",KHONG_HOP_LE
+TC-65131848-02,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc02@ntu.edu.vn"",""age"":18,""password"":""Matkhau123""}",HOP_LE
+TC-65131848-03,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc03@ntu.edu.vn"",""age"":100,""password"":""Matkhau123""}",HOP_LE
+TC-65131848-04,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc04@ntu.edu.vn"",""age"":101,""password"":""Matkhau123""}",KHONG_HOP_LE
+TC-65131848-05,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc05@ntu.edu.vn"",""age"":20,""password"":""Abc1234""}",KHONG_HOP_LE
+TC-65131848-06,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc06@ntu.edu.vn"",""age"":20,""password"":""Abc12345""}",HOP_LE
+TC-65131848-07,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc07@ntu.edu.vn"",""age"":20,""password"":""Abc12345678901234567""}",HOP_LE
+TC-65131848-08,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc08@ntu.edu.vn"",""age"":20,""password"":""Abc123456789012345678""}",KHONG_HOP_LE
+TC-65131848-09,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc09@ntu.edu.vn"",""age"":20,""password"":""Password""}",KHONG_HOP_LE
+TC-65131848-10,validateRegistration,"{""fullName"":""Nguyen Van A"",""email"":""tc10@ntu.edu.vn"",""age"":20,""password"":""12345678""}",KHONG_HOP_LE
+TC-65131848-11,validateQuantity,"{""quantity"":0}",KHONG_HOP_LE
+TC-65131848-12,validateQuantity,"{""quantity"":1}",HOP_LE
+TC-65131848-13,validateQuantity,"{""quantity"":99}",HOP_LE
+TC-65131848-14,validateQuantity,"{""quantity"":100}",KHONG_HOP_LE
+TC-65131848-17,calcShippingFee,"{""subtotal"":350000,""zone"":""noi-thanh"",""customerType"":""VIP""}",0
+TC-65131848-18,calcShippingFee,"{""subtotal"":350000,""zone"":""noi-thanh"",""customerType"":""THUONG""}",20000
+TC-65131848-19,calcShippingFee,"{""subtotal"":350000,""zone"":""ngoai-thanh"",""customerType"":""THUONG""}",35000
+TC-65131848-20,calcShippingFee,"{""subtotal"":550000,""zone"":""ngoai-thanh"",""customerType"":""THUONG""}",0
+TC-65131848-21,calcShippingFee,"{""subtotal"":450000,""zone"":""noi-thanh"",""customerType"":""THUONG""}",20000
+TC-65131848-22,calcShippingFee,"{""subtotal"":500000,""zone"":""ngoai-thanh"",""customerType"":""THUONG""}",0

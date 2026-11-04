@@ -1,0 +1,53 @@
+{
+  "name": "minishop-ntu",
+  "version": "1.0.0",
+  "description": "Hệ thống mẫu phục vụ thực hành học phần Kiểm thử phần mềm (SOT357) - Khoa CNTT, Trường Đại học Nha Trang",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "lint": "eslint .",
+    "lint:lab": "eslint src/lab-static",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report",
+    "e2e:codegen": "playwright codegen http://localhost:3000",
+    "test:ai": "jest tests/gen-ai --testPathIgnorePatterns=/node_modules/",
+    "api": "playwright test tests/api",
+    "coverage:ai": "jest tests/gen-ai --coverage --collectCoverageFrom=src/services/shipping.js --testPathIgnorePatterns=/node_modules/"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.56.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "src/services/**/*.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json-summary"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/gen-ai/"
+    ]
+  }
+}
