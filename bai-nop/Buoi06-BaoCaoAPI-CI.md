@@ -46,10 +46,10 @@ FR-05.5: unit Buổi 3 gọi hàm nghiệp vụ, không kiểm middleware/địn
 ## 5. Quy trình CI
 Workflow `.github/workflows/kiem-thu-day-du.yml`: 9 bước theo thứ tự checkout, setup Node 20, npm ci, lint (cho phép lỗi), unit, cài Chromium, API, E2E, upload. Cài Chromium trước Playwright; unit nhanh chạy trước E2E để phản hồi sớm. API, E2E và upload dùng `if: always()` để vẫn chạy sau lỗi, không làm mất trạng thái đỏ; cài Chromium cũng vậy sau unit đỏ.
 
-**Số liệu GitHub Actions:** chưa có bằng chứng chạy, thời gian và URL chưa xác nhận. Kết quả chạy cục bộ không phải kết quả Actions. E2E cục bộ không chạy được vì CDN Playwright bị chặn khi tải Chromium: 5 ca lỗi khởi tạo, 6 ca bị skip; không phân loại 5 lỗi này là lỗi sản phẩm. Các ca Buổi 5 còn khung/skip, vì vậy CI hiện không bao phủ đầy đủ FR-06 UI.
+**Số liệu GitHub Actions:** [lần chạy 41906926693](https://github.com/luanpnm65/kt/actions/runs/41906926693): job đỏ sau 44 giây; cài thư viện 3 giây, unit 1 giây, cài Chromium 17 giây, API 6 giây, E2E 6 giây (theo timestamp từng bước). Cả 9 bước chính đã chạy; unit, API và E2E thất bại; upload thành công. Chưa đọc được log chi tiết từ máy hiện tại do host lưu log bị chặn, nên chưa xác nhận số ca từng tầng trên CI. Kết quả cục bộ không phải kết quả Actions. E2E cục bộ không chạy được vì CDN Playwright bị chặn khi tải Chromium: 5 ca lỗi khởi tạo, 6 ca bị skip; không phân loại 5 lỗi này là lỗi sản phẩm. Các ca Buổi 5 còn khung/skip, vì vậy CI hiện không bao phủ đầy đủ FR-06 UI.
 
 ## 6. Hiện vật
-Workflow dự kiến tải `bao-cao-kiem-thu`, gồm `api/` và `e2e/`, thông qua `PLAYWRIGHT_HTML_REPORT`; không tách thì lần chạy sau ghi đè báo cáo trước. `if: always()` cho phép upload sau bước đỏ, nhưng nếu cài đặt hoặc chạy không tạo báo cáo thì không đảm bảo có file. Chưa có ảnh và chưa kiểm chứng tải artifact trên GitHub.
+Workflow dự kiến tải `bao-cao-kiem-thu`, gồm `api/` và `e2e/`, thông qua `PLAYWRIGHT_HTML_REPORT`; không tách thì lần chạy sau ghi đè báo cáo trước. `if: always()` cho phép upload sau bước đỏ, nhưng nếu cài đặt hoặc chạy không tạo báo cáo thì không đảm bảo có file. GitHub xác nhận artifact đã tải lên (2.124.700 byte), nhưng môi trường này không tải được để mở và kiểm chứng cả hai index.html; chưa có ảnh chụp.
 
 ## 7. Đường mốc đỏ tại máy
 | Tầng | Ca | Nguyên nhân / tham chiếu |
