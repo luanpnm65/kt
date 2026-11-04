@@ -8,7 +8,7 @@
  *   (b) cấu trúc thân phản hồi;
  *   (c) giá trị nghiệp vụ bên trong thân phản hồi.
  *
- * Nhiệm vụ của sinh viên: hoàn thành TODO (1) đến TODO (4).
+ * Các ca xác thực và phân quyền.
  * Không mở trình duyệt trong file này — chỉ dùng fixture `request`.
  */
 const { test, expect } = require('@playwright/test');
@@ -64,47 +64,39 @@ test('GET /api/cart không kèm token trả về 401', async ({ request }) => {
   expect((await res.json()).message).toBe('Bạn cần đăng nhập');
 });
 
-// ---------------------------------------------------------------
-// TODO (1): FR-02.3 — sai mật khẩu đủ 3 lần liên tiếp thì khóa tài khoản.
-//   Hai lần đầu phải nhận 401; lần thứ ba phải nhận 423 kèm thông báo
-//   chứa 'Tài khoản đã bị khóa'. Mỗi lần dùng một mật khẩu sai khác nhau.
-//   Xóa dòng TODO này sau khi hoàn thành.
-// ---------------------------------------------------------------
-
-// ---------------------------------------------------------------
-// TODO (2): FR-02.4 — tài khoản đang bị khóa thì mật khẩu ĐÚNG vẫn bị
-//   từ chối. Dựng trạng thái khóa trước, sau đó gọi lại với TK_THUONG
-//   và kiểm mã trạng thái cùng thông báo.
-//   Xóa dòng TODO này sau khi hoàn thành.
-// ---------------------------------------------------------------
-
-// ---------------------------------------------------------------
-// TODO (3): GET /api/cart với token không tồn tại phải trả về 401.
-//   Gửi header Authorization: 'Bearer <một chuỗi bất kỳ>'.
-//   Xóa dòng TODO này sau khi hoàn thành.
-// ---------------------------------------------------------------
-
-// ---------------------------------------------------------------
-// TODO (4): FR-05.5 — một tài khoản KHÔNG được hủy đơn hàng của tài
-//   khoản khác. Đây là ca quan trọng nhất của Phần 1A, vì giao diện web
-//   không có đường nào dựng được tình huống này.
-//   Các bước:
-//     1. Lấy token của TK_THUONG và của TK_VIP bằng layToken().
-//     2. Dùng token của TK_THUONG: thêm sản phẩm 4 vào giỏ, rồi tạo đơn
-//        với zone 'noi-thanh'. Kiểm tra tạo đơn trả về 201 và lưu lại id.
-//     3. Dùng token của TK_VIP gọi DELETE /api/orders/<id> đó.
-//        Theo FR-05.5, phản hồi phải là 404 (coi như không tìm thấy đơn).
-//     4. Kiểm tra TÁC DỤNG PHỤ: gọi lại GET /api/orders bằng token của
-//        TK_THUONG, đơn hàng vẫn phải ở trạng thái 'CHO_XAC_NHAN'.
-//   Bước 4 là bắt buộc: một mã trạng thái đúng không chứng minh được dữ
-//   liệu không bị thay đổi.
-//   Xóa dòng TODO này sau khi hoàn thành.
-// ---------------------------------------------------------------
-
-// Hằng TK_VIP và hàm layToken ở trên dành cho TODO (4).
-// Dòng dưới chỉ để file khung chạy được; xóa nó khi làm TODO (4).
-test('TODO: thay khối này bằng bốn ca ở TODO (1) đến TODO (4)', async ({ request }) => {
-  expect(typeof layToken).toBe('function');
-  expect(TK_VIP.email).toContain('@');
-  expect((await request.get('/api/health')).status()).toBe(200);
+test('FR-02.3 khóa sau ba lần sai', async ({ request }) => {
+  for (let i = 1; i <= 3; i++) {
+    const res = await request.post('/api/login', { data: { email: TK_THUONG.email, password: `sai${i}` } });
+    expect(res.status()).toBe(i === 3 ? 423 : 401);
+    expect((await res.json()).message).toContain(i === 3 ? 'Tài khoản đã bị khóa' : 'Sai email hoặc mật khẩu');
+  }
+});
+test('FR-02.4 mật khẩu đúng sau khi khóa vẫn bị từ chối', async ({ request }) => {
+  for (let i = 1; i <= 3; i++) await request.post('/api/login', { data: { email: TK_THUONG.email, password: `sai${i}` } });
+  const res = await request.post('/api/login', { data: TK_THUONG });
+  expect(res.status()).toBe(423);
+  expect((await res.json()).message).toContain('Tài khoản đã bị khóa');
+});
+test('token không tồn tại trả về 401', async ({ request }) => {
+  const res = await request.get('/api/cart', { headers: { Authorization: 'Bearer khong-ton-tai' } });
+  expect(res.status()).toBe(401);
+  expect((await res.json()).message).toBe('Bạn cần đăng nhập');
+});
+test('FR-05.5 không cho tài khoản khác hủy đơn và không thay đổi trạng thái', async ({ request }) => {
+  const thuong = await layToken(request, TK_THUONG);
+  const vip = await layToken(request, TK_VIP);
+  const headers = (t) => ({ Authorization: `Bearer ${t}` });
+  const added = await request.post('/api/cart', { headers: headers(thuong), data: { productId: 4, qty: 1 } });
+  expect(added.status()).toBe(200);
+  const created = await request.post('/api/orders', { headers: headers(thuong), data: { zone: 'noi-thanh' } });
+  expect(created.status()).toBe(201);
+  const order = await created.json();
+  expect(typeof order.id).toBe('number');
+  const deleted = await request.delete(`/api/orders/${order.id}`, { headers: headers(vip) });
+  expect.soft(deleted.status()).toBe(404);
+  const list = await request.get('/api/orders', { headers: headers(thuong) });
+  expect(list.status()).toBe(200);
+  const orders = await list.json();
+  expect(Array.isArray(orders)).toBe(true);
+  expect(orders.find((o) => o.id === order.id)).toMatchObject({ status: 'CHO_XAC_NHAN', email: TK_THUONG.email });
 });
