@@ -1,110 +1,60 @@
 # BUỔI 6 – PHẢN BIỆN CA KIỂM THỬ DO GEN-AI SINH RA
 
-<!-- CHUA_DIEN: xóa dòng này sau khi đã điền xong file -->
+- **Họ tên:** Phạm Nguyễn Minh Luân
+- **MSSV:** 65131848
 
-- **Họ tên:**
-- **MSSV:**
+## 1. Nguồn
+Bộ có sẵn `docs/Buoi06-TestCaseDoAISinh.md`, sao chép trong `tests/gen-ai/ai-sinh.test.js`, không sửa.
 
-## 1. Nguồn bộ ca được phản biện
+## 2. Dự đoán trước khi chạy và kết quả
+Dự đoán được ghi sau khi đọc mã, trước khi chạy coverage: 01–09 xanh, 10–11 đỏ. Chạy `npm run coverage:ai -- --runInBand`: 9 đạt, 2 thất bại, 11/11 dự đoán đúng.
 
-Đánh dấu một lựa chọn:
-
-- [ ] Dùng bộ ca có sẵn trong `docs/Buoi06-TestCaseDoAISinh.md`, đã chép vào `tests/gen-ai/ai-sinh.test.js`
-- [ ] Tự sinh bằng công cụ: …………… (ghi rõ tên công cụ, phiên bản và câu lệnh đã dùng)
-
-Nếu tự sinh, dán nguyên văn câu lệnh và kết quả vào phụ lục cuối file. Số ca phải từ 8 trở lên.
-
-## 2. Dự đoán trước khi chạy, và kết quả thật
-
-Đọc `src/services/shipping.js` và mục FR-04 của SRS v1.2, **dự đoán trước** ca nào sẽ đỏ. Sau đó chạy `npm run test:ai` và ghi kết quả thật vào cột bên cạnh.
-
-> Giữ nguyên phần dự đoán kể cả khi dự đoán sai. Chỗ lệch giữa hai cột là chỗ đáng học nhất.
-
-| Mã ca | Dự đoán (xanh/đỏ) | Kết quả thật | Lệch? |
+| Mã | Dự đoán | Thực tế | Lệch |
 |---|---|---|---|
-| AI-01 | | | |
-| AI-02 | | | |
-| AI-03 | | | |
-| AI-04 | | | |
-| AI-05 | | | |
-| AI-06 | | | |
-| AI-07 | | | |
-| AI-08 | | | |
-| AI-09 | | | |
-| AI-10 | | | |
-| AI-11 | | | |
-
-| Chỉ số | Giá trị |
-|---|---|
-| Tổng số ca | |
-| Số ca đạt | |
-| Số ca thất bại | |
-| Số ca dự đoán đúng | |
+| AI-01 | xanh | xanh | không |
+| AI-02 | xanh | xanh | không |
+| AI-03 | xanh | xanh | không |
+| AI-04 | xanh | xanh | không |
+| AI-05 | xanh | xanh | không |
+| AI-06 | xanh | xanh | không |
+| AI-07 | xanh | xanh | không |
+| AI-08 | xanh | xanh | không |
+| AI-09 | xanh | xanh | không |
+| AI-10 | đỏ | đỏ | không |
+| AI-11 | đỏ | đỏ | không |
 
 ## 3. Phản biện từng ca
-
-Phân loại mỗi ca theo **đúng một** trong bốn nhãn:
-
-- **ĐÚNG** – ca hợp lệ, kết quả mong đợi đúng theo SRS v1.2;
-- **SAI KẾT QUẢ** – AI bịa ra hành vi mà hệ thống không có (hallucination);
-- **THỪA** – trùng lớp tương đương với ca khác, không tăng khả năng bắt lỗi;
-- **LUÔN XANH** – ca không thể thất bại dù mã nguồn sai, nên vô giá trị.
-
-Hai lưu ý khi phân loại: một ca **đỏ** không tự động là `SAI KẾT QUẢ` — phải xác định bên nào sai, ca kiểm thử hay sản phẩm; một ca **xanh** không tự động là `ĐÚNG` — ca luôn xanh cũng xanh. Với nhãn `THỪA`, phải chỉ rõ trùng với ca nào.
-
-| Mã ca | Phân loại | Giải thích | Căn cứ (SRS v1.2 hoặc mã nguồn) |
-|---|---|---|---|
-| AI-01 | | | |
-| AI-02 | | | |
-| AI-03 | | | |
-| AI-04 | | | |
-| AI-05 | | | |
-| AI-06 | | | |
-| AI-07 | | | |
-| AI-08 | | | |
-| AI-09 | | | |
-| AI-10 | | | |
-| AI-11 | | | |
-
-**Tổng hợp:** ĐÚNG …… / SAI KẾT QUẢ …… / THỪA …… / LUÔN XANH ……
-
-## 4. Những gì AI bỏ sót
-
-Đối chiếu với bộ ca của chính mình ở Buổi 2 và Buổi 3.
-
-| Trường hợp bị bỏ sót | Căn cứ trong SRS v1.2 | Hậu quả nếu không kiểm |
+| Mã | Phân loại | Căn cứ |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+| AI-01 | ĐÚNG | Thường nội thành dưới 500.000: 20.000, FR-04.1–04.2. |
+| AI-02 | ĐÚNG | Thường ngoại thành dưới ngưỡng: 35.000, FR-04.1–04.2. |
+| AI-03 | THỪA | Cùng lớp thường nội thành dưới ngưỡng với AI-01. |
+| AI-04 | THỪA | Cùng lớp với AI-01; không phải biên. |
+| AI-05 | ĐÚNG | Từ 500.000 miễn phí, FR-04.2. |
+| AI-06 | ĐÚNG | Sát dưới ngưỡng: vẫn 20.000, FR-04.2. |
+| AI-07 | ĐÚNG | VIP miễn phí, FR-04.3. |
+| AI-08 | LUÔN XANH | >= 0 quá yếu: phí sai dương vẫn xanh; thực tế vẫn có thể đỏ nếu hàm trả số âm hoặc ném lỗi. |
+| AI-09 | LUÔN XANH | `toBeDefined` chấp nhận phí sai bất kỳ, chỉ đỏ nếu undefined hoặc exception. |
+| AI-10 | SAI KẾT QUẢ | Mục 1.3 không giao ngoài tỉnh; shipping.js ném lỗi, không có phí mặc định. SRS không chỉ định hình thức lỗi. |
+| AI-11 | SAI KẾT QUẢ | FR-04.1–04.2 không miễn phí khi subtotal bằng 0; hàm trả 20.000. Đặt giỏ rỗng là quy tắc riêng FR-05.1. |
 
-## 5. Kiểm chứng lời tuyên bố của AI
+Tổng: ĐÚNG 5, SAI KẾT QUẢ 2, THỪA 2, LUÔN XANH 2. Nhãn luôn xanh theo nghĩa bài tập là khẳng định yếu, không phải bất khả thất bại về mặt toán học.
 
-AI khẳng định bộ ca của nó *"đạt 100% độ bao phủ câu lệnh và có thể dùng ngay trong dự án"*.
-
-Đo thật bằng `npm run coverage:ai`.
-
-| Chỉ số | AI tuyên bố | Đo được thực tế |
+## 4. Phần thiếu
+| Trường hợp | Căn cứ | Rủi ro |
 |---|---|---|
-| Bao phủ câu lệnh | 100% | |
-| Bao phủ nhánh | (không nêu) | |
-| Dòng chưa được phủ | (không nêu) | |
+| 500.000 đúng ngưỡng và 500.001 | FR-04.2, ca biên Buổi 2 | sai toán tử biên không bị phát hiện |
+| VIP ngoại thành dưới ngưỡng | FR-04.3 | chỉ miễn phí VIP nội thành |
+| Thường ngoại thành ngay dưới và tại ngưỡng | FR-04.1–04.2 | sai phí hoặc ngưỡng ở ngoại thành |
+| Khu vực sai phải bị từ chối | SRS mục 1.3; shipping.js ném lỗi | âm tính giả do AI-10 kỳ vọng sai |
+| subtotal không phải số/NaN | kiểm tra đầu vào trong shipping.js | thiếu kiểm nhánh lỗi |
 
-**5.1.** Nhận xét về độ tin cậy của lời tuyên bố này:
-
-**5.2.** Trong bộ ca này có ca thuộc nhãn `LUÔN XANH`. Những ca đó có làm **tăng** độ bao phủ hay không? Điều đó nói lên hạn chế gì của việc dùng độ bao phủ làm thước đo chất lượng bộ kiểm thử?
+## 5. Đo bao phủ
+`npm run coverage:ai -- --runInBand`: câu lệnh 91,66%, nhánh 81,81%, dòng 91,66%, 1 dòng chưa phủ (dòng 15). Tuyên bố 100% không đúng. Các ca khẳng định yếu vẫn gọi hàm và có thể phủ dòng/nhánh, nhưng không kiểm đúng giá trị; độ phủ không chứng minh khả năng phát hiện lỗi.
 
 ## 6. Kết luận
+Dùng ngay 5/11 (45,45%), sửa 2, bỏ 4. Review: giữ hai ca theo khu vực và các ca ngưỡng/VIP; sửa AI-10 thành `toThrow`, AI-11 thành 20.000 hoặc bỏ nếu không cần; bỏ hai ca trùng và hai assertion yếu. Bổ sung biên và tổ hợp còn thiếu. Không coi độ phủ cao là bằng chứng correctness.
 
-**6.1.** Trong 11 ca, bao nhiêu ca **dùng được ngay**, bao nhiêu ca **phải sửa**, bao nhiêu ca **nên bỏ**? Tính tỷ lệ dùng được. Viết thêm 4–6 dòng như một nhận xét review nếu nhận bộ ca này từ một đồng nghiệp mới vào nghề.
+Ước lượng theo số thao tác, không phải số phút đo: sửa bộ AI cần đọc 11, sửa 2, loại 4, thêm ít nhất 4 ca; tự viết bộ tương đương ít nhất 11 ca riêng. Không thể kết luận cách nào tiết kiệm thời gian nếu chưa đo thời gian thực tế; số ca sửa ít hơn không bao gồm công review.
 
-**6.2.** Giữa hai việc — tự viết bộ ca từ đầu, và sửa bộ ca do AI sinh ra — việc nào mất ít công hơn cho hàm `calcShippingFee`? Trả lời **có số liệu** (số ca phải đọc, số ca phải sửa, số ca phải viết thêm), không trả lời theo cảm nhận.
-
-**6.3.** Mục 0.3 của đề bài đã loại `tests/gen-ai/` khỏi `npm test`. Sau khi phản biện xong, nêu **điều kiện cụ thể** để một bộ ca do AI sinh ra được phép đưa vào quy trình tự động.
-
-## Phụ lục (nếu tự sinh bộ ca)
-
-Câu lệnh đã dùng:
-
-Kết quả nguyên văn:
+Chỉ đưa vào CI sau khi review từng kỳ vọng theo SRS, sửa/bỏ ca yếu hoặc sai, bổ sung lớp/biên, chạy độc lập lặp lại ổn định, xác định nguyên nhân mọi ca đỏ và được người chịu trách nhiệm phê duyệt.

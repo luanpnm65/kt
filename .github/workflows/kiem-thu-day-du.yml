@@ -1,0 +1,42 @@
+name: Kiểm thử đầy đủ
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  kiem-thu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Thiết lập Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Cài thư viện
+        run: npm ci
+      - name: Phân tích tĩnh
+        run: npm run lint
+        continue-on-error: true
+      - name: Kiểm thử đơn vị
+        run: npm test -- --runInBand
+      - name: Cài Chromium
+        if: always()
+        run: npx playwright install --with-deps chromium
+      - name: Kiểm thử API
+        if: always()
+        run: npx playwright test tests/api
+        env:
+          PLAYWRIGHT_HTML_REPORT: bao-cao/api
+      - name: Kiểm thử đầu cuối
+        if: always()
+        run: npx playwright test tests/e2e
+        env:
+          PLAYWRIGHT_HTML_REPORT: bao-cao/e2e
+      - name: Lưu báo cáo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bao-cao-kiem-thu
+          path: bao-cao/
+          if-no-files-found: warn

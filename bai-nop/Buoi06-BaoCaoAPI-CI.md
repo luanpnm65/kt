@@ -1,179 +1,77 @@
-# BUỔI 6 – BÁO CÁO KIỂM THỬ API VÀ TÍCH HỢP LIÊN TỤC
+# BUỔI 6 – BÁO CÁO KIỂM THỬ API VÀ CI
 
-<!-- CHUA_DIEN: xóa dòng này sau khi đã điền xong file -->
+- **Họ tên:** Phạm Nguyễn Minh Luân
+- **MSSV:** 65131848
+- **Phiên bản:** MiniShop NTU v1.1.0; SRS v1.2
 
-- **Họ tên:**
-- **MSSV:**
-- **Phiên bản phần mềm:** MiniShop NTU v1.1.0
-- **Tài liệu yêu cầu:** SRS v1.2
+## 1. Tổng hợp API
+`npm run api`: 20 ca, 16 đạt, 4 thất bại, 6,3 giây (Playwright báo). Mỗi ca reset dữ liệu; ca phân quyền dùng soft assertion để vẫn kiểm trạng thái sau yêu cầu sai.
 
----
-
-# PHẦN 1 — KIỂM THỬ API
-
-## 1. Tổng hợp kết quả
-
-Chạy `npm run api`.
-
-| Chỉ số | Giá trị |
-|---|---|
-| Tổng số ca API | |
-| Số ca đạt | |
-| Số ca thất bại | |
-| Thời gian chạy | |
-
-## 2. Danh mục ca đã viết và phân tích ca thất bại
-
-### 2.1. Danh mục ca kiểm thử API
-
-| Điểm cuối | Phương thức | Yêu cầu (SRS v1.2) | Mã trạng thái mong đợi | Kết quả |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-### 2.2. Phân tích các ca thất bại
-
-Phân loại nguyên nhân: **lỗi sản phẩm** / **ca kiểm thử sai** / **đặc tả chưa rõ**.
-
-| Tên ca | Kết quả mong đợi | Kết quả thực tế | Phân loại nguyên nhân | Căn cứ (SRS v1.2) |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-## 3. Lỗi chỉ phát hiện được ở tầng API
-
-Buổi 3 kiểm thử ở mức hàm, Buổi 5 kiểm thử qua giao diện. Có lỗi mà cả hai tầng đều không chạm tới.
-
-| Lỗi | Vì sao kiểm thử đơn vị không viết được ca này | Vì sao kiểm thử đầu cuối không viết được ca này | Ca API nào bắt được |
-|---|---|---|---|
-| | | | |
-
-**3.1.** Mức nghiêm trọng của lỗi này, và hậu quả cụ thể nếu phát hành:
-
-**3.2.** Điều này nói lên điều gì về việc chỉ dựa vào một tầng kiểm thử duy nhất?
-
-## 4. Hiện tượng hai ca cùng kiểm một công thức nhưng khác kết quả
-
-Ca ở TODO (7) và ca ở TODO (8) đều kiểm công thức `total = subtotal − discount + shippingFee`.
-
-| Mục | TODO (7) — thành viên THUONG | TODO (8) — thành viên VIP |
+## 2. Danh mục và phân tích
+| Điểm cuối / yêu cầu | Mã kỳ vọng | Kết quả |
 |---|---|---|
-| `subtotal` | | |
-| `discount` | | |
-| `shippingFee` | | |
-| `total` mong đợi | | |
-| `total` thực tế | | |
-| Kết quả ca | | |
+| POST login đúng, sai / FR-02 | 200, 401 | đạt |
+| GET cart không token / token sai | 401 | đạt |
+| POST login khóa và đăng nhập sau khóa / FR-02.3–4 | 401, 423 | đạt |
+| DELETE orders của người khác / FR-05.5 | 404, không đổi trạng thái | **sai**: 200 và DA_HUY |
+| POST cart số lượng 0, sản phẩm thiếu / FR-03.2, 03.6 | 400, 404 | đạt |
+| POST cart cập nhật / FR-03.3 | 200 | đạt |
+| POST orders làm trống giỏ / FR-05.1 | 201 và giỏ rỗng | đạt |
+| DELETE cart thiếu / FR-03.5 | 404 | đạt |
+| POST orders giỏ rỗng / FR-05.1 | 400 | đạt |
+| POST orders thường / FR-05.2 | 201, tổng 370.000 | **sai**: 350.000 |
+| POST orders VIP / FR-05.3 | 201, tổng 332.500 | đạt |
+| DELETE orders thiếu, hủy lại / FR-05.5 | 404, 200, 409 | đạt |
+| GET products giá giảm / FR-06.5 | 200, giảm dần | **sai**: tăng dần |
+| GET products còn hàng / FR-06.6 | 200, stock > 0 | **sai**: có stock = 0 |
+| GET products danh mục và giá / FR-06.7 | 200, Sổ tay và Bút ký | đạt |
 
-**4.1.** Lỗi nằm ở dòng nào trong `src/server.js`? Vì sao cùng lỗi đó mà một ca phát hiện được, một ca thì không?
+Bốn ca thất bại là lỗi sản phẩm theo các FR đã nêu, không phải lỗi kỳ vọng. `src/server.js` tìm đơn chỉ theo id, tính tổng thiếu phí, sắp xếp tăng cho cả hai lựa chọn, và lọc `stock >= 0`.
 
-**4.2.** Kết luận về cách chọn dữ liệu kiểm thử:
+## 3. Lỗi riêng tầng API
+FR-05.5: unit Buổi 3 gọi hàm nghiệp vụ, không kiểm middleware/định tuyến và danh tính chủ đơn; E2E Buổi 5 chỉ thao tác UI, không có chức năng hủy đơn của tài khoản khác. API chủ động dùng hai token để dựng tấn công và đọc lại trạng thái. Mức **Critical** do xâm phạm phân quyền và làm mất đơn người khác. Không thể dựa vào một tầng duy nhất: mỗi tầng có bề mặt quan sát khác nhau.
 
----
+## 4. Công thức tổng
+| | Thường | VIP |
+|---|---:|---:|
+| subtotal | 350.000 | 350.000 |
+| discount | 0 | 17.500 |
+| shippingFee | 20.000 | 0 |
+| total mong đợi | 370.000 | 332.500 |
+| total thực tế | 350.000 | 332.500 |
+| kết quả | đỏ | xanh |
 
-# PHẦN 2 — QUY TRÌNH TÍCH HỢP LIÊN TỤC
+`src/server.js:138` bỏ `+ fee`. VIP phí bằng 0 nên lỗi bị che; chọn dữ liệu có phí khác 0 và cả biên miễn phí để tránh che lỗi.
 
-## 5. Cấu trúc quy trình và lần chạy đầu tiên
+## 5. Quy trình CI
+Workflow `.github/workflows/kiem-thu-day-du.yml`: 9 bước theo thứ tự checkout, setup Node 20, npm ci, lint (cho phép lỗi), unit, cài Chromium, API, E2E, upload. Cài Chromium trước Playwright; unit nhanh chạy trước E2E để phản hồi sớm. API, E2E và upload dùng `if: always()` để vẫn chạy sau lỗi, không làm mất trạng thái đỏ; cài Chromium cũng vậy sau unit đỏ.
 
-### 5.1. Các bước đã khai báo
+**Số liệu GitHub Actions:** chưa có bằng chứng chạy, thời gian và URL chưa xác nhận. Kết quả chạy cục bộ không phải kết quả Actions. E2E cục bộ không chạy được vì CDN Playwright bị chặn khi tải Chromium: 5 ca lỗi khởi tạo, 6 ca bị skip; không phân loại 5 lỗi này là lỗi sản phẩm. Các ca Buổi 5 còn khung/skip, vì vậy CI hiện không bao phủ đầy đủ FR-06 UI.
 
-| Thứ tự | Tên bước | Lệnh hoặc action | Vì sao đặt ở vị trí này |
-|---|---|---|---|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
+## 6. Hiện vật
+Workflow dự kiến tải `bao-cao-kiem-thu`, gồm `api/` và `e2e/`, thông qua `PLAYWRIGHT_HTML_REPORT`; không tách thì lần chạy sau ghi đè báo cáo trước. `if: always()` cho phép upload sau bước đỏ, nhưng nếu cài đặt hoặc chạy không tạo báo cáo thì không đảm bảo có file. Chưa có ảnh và chưa kiểm chứng tải artifact trên GitHub.
 
-### 5.2. Số liệu lần chạy trên nhánh `buoi-06`
+## 7. Đường mốc đỏ tại máy
+| Tầng | Ca | Nguyên nhân / tham chiếu |
+|---|---|---|
+| API | FR-05.5 hủy đơn người khác | Lỗi phân quyền mới, chưa có issue |
+| API | FR-05.2 tổng thường | Thiếu phí, chưa có issue |
+| API | FR-06.5 giá giảm | Lỗi sản phẩm, Buổi 4 ca 2 |
+| API | FR-06.6 còn hàng | Lỗi sản phẩm, Buổi 4 ca 3 |
+| Unit | subtotal không hợp lệ | đòi throw với số âm, cần xác nhận đặc tả đầu vào |
+| Unit | khách thường hoặc ngoại thành | kỳ vọng VIP ngoại thành 35.000 sai FR-04.3 |
+| Unit | số lượng không hợp lệ | kỳ vọng qty 0 hợp lệ sai FR-03.2 |
+| Unit | sản phẩm không tồn tại | kỳ vọng thêm thành công sai FR-03.6 |
+| Unit | TC-65131848-06 | đối chiếu dữ liệu CSV với FR-01.4 |
+| Unit | TC-65131848-12 | đối chiếu CSV với FR-03.2 |
+| Unit | TC-65131848-13 | đối chiếu CSV với FR-03.2 |
 
-| Mục | Giá trị |
-|---|---|
-| Đường dẫn tới lần chạy | |
-| Tổng thời gian chạy | |
-| Thời gian bước cài thư viện | |
-| Thời gian bước cài trình duyệt | |
-| Thời gian bước kiểm thử đơn vị | |
-| Thời gian bước kiểm thử API | |
-| Thời gian bước kiểm thử đầu cuối | |
-| Trạng thái cuối cùng của job | |
-| Số ca thất bại: đơn vị / API / đầu cuối | |
+Tổng 11 ca đỏ / 66 ca API + unit; chưa bao gồm E2E do thiếu trình duyệt. Các ca CSV cần kiểm lại dữ liệu trước khi kết luận nguyên nhân.
 
-**5.3.** Mọi bước đều đã chạy hay có bước bị bỏ qua? Nếu có, vì sao?
+## 8. Thực nghiệm hồi quy
+Chưa thực hiện nhánh `thu-ci`: môi trường phiên làm việc chỉ cho phép nhánh hiện tại; không sửa `src/` hoặc tạo nhánh khác. Vì vậy chưa có số liệu trước/sau, ca chuyển đỏ, URL và thời gian push. Không giả lập bằng số liệu giả. Thiết kế thực nghiệm để người tiếp nhận thực hiện ở môi trường được phép: đổi phí nội thành 20.000 thành 25.000, so sánh danh sách ca trước/sau; không gộp nhánh thử nghiệm. Nếu không có đường mốc thì khó tách ca đỏ mới khỏi 11 ca đỏ cũ. `tests/unit/do-phu.test.js` có kiểm cứng 20.000 (Buổi 3); cần thực sự chạy trước khi xác nhận ca chuyển màu. Chưa quan sát được ca đáng lẽ đỏ mà vẫn xanh; không khẳng định có hay không. Kỳ vọng phải lấy từ SRS độc lập, không lấy hằng số từ chính hàm cần kiểm; số cứng có căn cứ như 20.000 theo FR-04.1 là oracle cần thiết, không phải mùi xấu.
 
-**5.4.** Vì sao bước cài trình duyệt phải đứng trước hai bước Playwright? Vì sao đặt kiểm thử đơn vị trước kiểm thử đầu cuối chứ không ngược lại?
-
-## 6. Hiện vật kiểm thử
-
-| Mục | Nội dung |
-|---|---|
-| Tên gói hiện vật tải lên | |
-| Các thư mục bên trong gói | |
-| Hai báo cáo HTML có riêng biệt không | |
-| Nếu bỏ biến `PLAYWRIGHT_HTML_REPORT` thì điều gì xảy ra | |
-| Vì sao bước tải lên phải có `if: always()` | |
-
-Chèn ảnh chụp trang kết quả Actions vào `bai-nop/hinh/` và dẫn đường dẫn tại đây.
-
-## 7. Đường mốc đỏ đã biết
-
-Danh sách các ca đang đỏ đã xác định được nguyên nhân. Từ đường mốc này trở đi, chỉ ca đỏ **mới** là tín hiệu đáng báo động.
-
-| Tầng | Tên ca | Nguyên nhân đã biết | Issue Buổi 4 hoặc mã lỗi |
-|---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
-
-**Tổng số ca đỏ ở đường mốc:** …… / …… ca
-
-## 8. Thực nghiệm: quy trình có bắt được lỗi mới không
-
-Nhánh `thu-ci`, cố ý sửa `src/` để làm một ca **đang xanh** chuyển sang đỏ.
-
-| Mục | Nội dung |
-|---|---|
-| Đã sửa gì trong `src/` | |
-| Ca nào chuyển từ xanh sang đỏ | |
-| Số ca đỏ: trước thực nghiệm → sau thực nghiệm | |
-| Thời gian từ lúc push tới lúc biết kết quả | |
-| Đường dẫn tới lần chạy của nhánh `thu-ci` | |
-
-**8.1.** Nếu không lập đường mốc ở mục 7, có nhận ra được ca mới đỏ này giữa các ca đỏ cũ hay không? Vì sao?
-
-**8.2.** Ca vừa chuyển sang đỏ được viết ở **buổi nào**? Nó nằm trong file nào?
-
-**8.3.** Liệt kê những ca **đáng lẽ phải đỏ mà vẫn xanh** sau khi sửa mã nguồn. Với mỗi ca, mở ra đọc dòng khẳng định và giải thích vì sao nó không phát hiện được thay đổi.
-
-> Gợi ý: nếu kết quả mong đợi của một ca được lấy từ chính mã nguồn, thì khi mã nguồn đổi, cả hai phía của phép so sánh đổi theo nhau.
-
-**8.4.** Từ quan sát ở 8.3, kết quả mong đợi của một ca kiểm thử nên suy từ đâu? Số cứng trong ca kiểm thử là mùi mã xấu hay là điều cần thiết? Trả lời có dẫn ví dụ cụ thể từ repo của mình.
-
-> Nhắc lại: nhánh `thu-ci` **không** được gộp vào `buoi-06` hay `main`.
-
-## 9. Câu hỏi phân tích
-
-**9.1.** `continue-on-error: true` ở bước ESLint nghĩa là gì? Nếu đặt nó cho cả hai bước kiểm thử thì job sẽ xanh — vì sao đó là một cấu hình có hại, dù trông gọn gàng hơn?
-
-**9.2.** Bước cài trình duyệt mất khoảng một phút mỗi lần chạy. Nêu một cách giảm thời gian này mà **không** bỏ bước đó.
-
-**9.3.** Quy trình hiện chạy trên mọi lần đẩy ở mọi nhánh. Với một lớp 50 sinh viên cùng dùng một repo tổ chức, điều này gây ra vấn đề gì, và nên giới hạn thế nào?
+## 9. Phân tích cấu hình
+1. `continue-on-error` biến lỗi bước thành không chặn job; áp dụng cho test có thể làm job xanh giả. `if: always()` vẫn chạy bước sau mà giữ lỗi của bước trước.
+2. Cache thư mục trình duyệt theo OS và phiên bản Playwright, vẫn chạy lệnh cài để kiểm tra/cache miss; cân nhắc phụ thuộc hệ điều hành.
+3. Mọi push ở 50 nhánh tăng phút CI, hàng đợi và chi phí; giới hạn push theo nhánh làm bài/chính và PR, dùng concurrency hủy lần cũ. Không bỏ kiểm PR quan trọng.
